@@ -3,18 +3,24 @@ const bodyParser = require("body-parser");
 const api = require("./routes/api");
 const cors = require("cors");
 
+const port = 8000;
+
 const app = express();
 
-const port = 8000;
-const corsOptions = {
-  origin: "http://localhost:8000",
-  optionsSuccessStatus: 200
-};
+init();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+function middlewares() {
+  app.use(cors());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
+}
 
-app.use("/api", api);
-app.use(cors(corsOptions));
+function routes() {
+  app.use("/api", api);
+}
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+function init() {
+  middlewares();
+  routes();
+  app.listen(port, () => console.log(`Listening on port ${port}`));
+}
