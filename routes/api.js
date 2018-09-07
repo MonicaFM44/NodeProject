@@ -5,15 +5,20 @@ const url = "mongodb://newsapi:newsapi1234@ds125422.mlab.com:25422/newsapi";
 
 MongoClient.connect(
   url,
-  function(err, db) {
+  (err, db) => {
     console.log("Connected to mongodb");
 
-    router.get("/favorites", function(req, res) {
+    router.get("/favorites", (req, res) => {
       db.collection("news")
         .find()
-        .toArray(function(err, news) {
-          res.json(news);
-        });
+        .toArray((err, news) => res.json(news));
+    });
+
+    router.get("/favorites/:title", (req, res) => {
+      const query = { title: req.params.title };
+      db.collection("news")
+        .find(query)
+        .toArray((err, article) => res.json(article));
     });
 
     router.get("/", (req, res) => res.send("api works"));
