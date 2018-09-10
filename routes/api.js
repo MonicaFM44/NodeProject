@@ -14,6 +14,16 @@ MongoClient.connect(
         .toArray((err, news) => res.json(news));
     });
 
+    router.post("/favorites", (req, res) => {
+      db.collection("news").insertOne(req.body, (err, result) => {
+        if (err) {
+          res.send({ error: "An error has occurred" });
+        } else {
+          res.send(result.ops[0]);
+        }
+      });
+    });
+
     router.get("/favorites/:title", (req, res) => {
       const query = { title: req.params.title };
       db.collection("news")
